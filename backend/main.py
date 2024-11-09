@@ -1,11 +1,22 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from os import getenv
 from places import PlacesClient
 
 app = FastAPI()
 
+origins = ["*", "http://localhost:3000"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 places = PlacesClient(getenv("PLACES_API_KEY"))
+
 
 @app.get('/get_nearby')
 def get_nearby(lat: float, long: float):
