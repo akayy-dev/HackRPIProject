@@ -19,7 +19,7 @@ class OpenAIClient():
              messages=[
                  {
                      "role": "user",
-                     "content": input["content"]
+                     "content": input
                  }
              ]
          )
