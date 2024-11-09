@@ -12,39 +12,37 @@ const LocationTable = () => {
       try {
         const { latitude, longitude } = await getGeolocation();
         const data = await fetchLocationData(latitude, longitude);
-  
+
+        // Log the initial data fetched to verify structure
+        console.log("Initial places data:", data);
+
         // Populate the table initially with places data only
         setPlaces(data);
-  
+
         // Fetch description for each place and update each entry as it arrives
         const updatedPlaces = await Promise.all(
           data.map(async (place) => {
             const description = await fetchPlaceInfo(place.name);
-            console.log(`Description for ${place.name}:`, description); // Log each description
+            console.log(`Fetched description for ${place.name}:`, description); // Log each description
             return { ...place, description };
           })
         );
-  
-        // Update the places with descriptions
-        setPlaces(updatedPlaces);
-        console.log('Updated places with descriptions:', updatedPlaces); // Log the updated state
+
+        // Log updated places with descriptions
+        console.log("Updated places with descriptions:", updatedPlaces);
+        setPlaces(updatedPlaces); // Update the state with descriptions
       } catch (error) {
         setError(error);
       }
     };
-  
+
     loadNearbyPlaces();
   }, []);
-  
 
   const toggleRow = (index) => {
-    setExpandedRows((prev) => {
-      const newExpandedState = { ...prev, [index]: !prev[index] };
-      console.log('Toggled row:', index, 'Expanded state:', newExpandedState);
-      return newExpandedState;
-    });
+    console.log('Clicked row index:', index); // Log the clicked row index
+    setExpandedRows((prev) => ({ ...prev, [index]: !prev[index] }));
   };
-  
 
   if (error) return <p>{error}</p>;
 

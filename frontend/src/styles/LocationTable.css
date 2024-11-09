@@ -49,10 +49,10 @@
   }
   
   .description-content {
-    max-height: 0;
-    overflow: hidden;
+    max-height: none;
+    overflow: visible;
     transition: max-height 0.3s ease;
-  }
+  }  
   
   tr.expanded .description-content {
     max-height: 100px; /* Adjust based on content */
