@@ -2,6 +2,7 @@ annotated-types==0.7.0
 anyio==4.6.2.post1
 arcade==2.6.17
 attrs==24.2.0
+beautifulsoup4==4.12.3
 certifi==2024.8.30
 cffi==1.17.1
 charset-normalizer==3.4.0
@@ -19,6 +20,8 @@ pymunk==6.4.0
 pytiled-parser==2.2.0
 requests==2.32.3
 sniffio==1.3.1
+soupsieve==2.6
 starlette==0.41.2
 urllib3==2.2.3
 uvicorn==0.32.0
+wikipedia==1.4.0
