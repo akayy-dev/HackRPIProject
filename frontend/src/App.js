@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import LocationDisplay from './components/locationDisplay';
-import NearbyOptionsTable from './components/LocationTable';
+import LocationTable from './components/LocationTable';
 import EmissionsTracker from './components/EmissionsTracker';
 import Shop from './components/Shop';
 import LoginForm from './components/login/loginForm';
@@ -46,7 +46,7 @@ const MainApp = () => {
         return (
           <div>
             <LocationDisplay />
-            <NearbyOptionsTable />
+            <LocationTable />
           </div>
         );
     }

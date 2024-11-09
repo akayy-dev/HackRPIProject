@@ -1,64 +1,55 @@
-// src/components/NearbyOptionsTable.js
+// src/components/LocationTable.js
 
-import React, { useEffect, useState } from 'react';
-import { fetchLocationData } from '../services/locationService';
+import React, { useState, useEffect } from 'react';
+import { fetchLocationData, getGeolocation } from '../services/locationService';
+import '../styles/LocationTable.css';
 
-const LocationTable = ({ latitude, longitude }) => {
+const LocationTable = () => {
   const [places, setPlaces] = useState([]);
-  const [expandedRows, setExpandedRows] = useState({});
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadNearbyPlaces = async () => {
       try {
+        const { latitude, longitude } = await getGeolocation();
         const data = await fetchLocationData(latitude, longitude);
         setPlaces(data);
       } catch (error) {
-        console.error('Failed to load location data', error);
+        setError(error);
       }
     };
-    loadData();
-  }, [latitude, longitude]);
 
-  const toggleRow = (index) => {
-    setExpandedRows((prevExpandedRows) => ({
-      ...prevExpandedRows,
-      [index]: !prevExpandedRows[index],
-    }));
-  };
+    loadNearbyPlaces();
+  }, []);
+
+  if (error) return <p>{error}</p>;
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Address</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        {places.map((place, index) => (
-          <tr key={index}>
-            <td>{place.name}</td>
-            <td>{place.type}</td>
-            <td>{place.address}</td>
-            <td onClick={() => place.description && toggleRow(index)} style={{ cursor: place.description ? 'pointer' : 'default' }}>
-              {place.description ? (
-                <div>
-                  {expandedRows[index] ? (
-                    <div className="description expanded">{place.description}</div>
-                  ) : (
-                    <span className="description-preview">Click to view description</span>
-                  )}
-                </div>
-              ) : (
-                <span>No description available</span>
-              )}
-            </td>
+    <div className="nearby-options">
+      <h2>Explore Nearby Options</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Address</th>
+            <th>Image</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {places.map((place, index) => (
+            <tr key={index}>
+              <td>{place.name}</td>
+              <td>{place.type}</td>
+              <td>{place.address}</td>
+              <td>
+                <img src={place.image} alt={place.name} width="100" />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
