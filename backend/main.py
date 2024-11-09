@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from os import getenv
 from places import PlacesClient
+from gpt import OpenAIClient
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ app.add_middleware(
 )
 
 places = PlacesClient(getenv("PLACES_API_KEY"))
+openai = OpenAIClient(getenv("OPENAI_KEY"), getenv("ASST_KEY"))
 
 
 @app.get('/get_nearby')
@@ -26,6 +28,9 @@ def get_nearby(lat: float, long: float):
 @app.get('/get_place_info')
 def get_place_info(name: str):
 	"""Get a summary of a place by searching wikipedia for it, if the page doesn't exist, return none."""
+	page_content = places.get_summary(name)
+	if page_content.get("content"):
+		return openai.get_summary(page_content.get("summary"))
 	return places.get_summary(name)
 
 if __name__ == '__main__':

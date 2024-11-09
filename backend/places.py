@@ -7,7 +7,7 @@ class PlacesClient:
 		self.client = googlemaps.Client(API_KEY)
 		self._KEY = API_KEY # making the key an attribute is stupid, but i need it to get the image url.
 	
-	def convert_coords(self, lat: float, lng: float, types: list[str]):
+	def convert_coords(self, lat: float, lng: float, types: list[str]) -> list[dict]:
 		"""Convert location coordinates to human-readable address and image"""
 		places = []
 		for place_type in types:
@@ -29,7 +29,7 @@ class PlacesClient:
 							}
 							places.append(place_json)
 		return places
-	def get_summary(self, place: str):
+	def get_summary(self, place: str) -> dict:
 		"""Get a summary of a place from wikipedia, if the page doesn't exist, return none."""
 		page: wikipedia.WikipediaPage = None
 		try:
@@ -50,7 +50,7 @@ class PlacesClient:
 if __name__ == '__main__':
 	KEY = getenv("PLACES_API_KEY")
 	client = PlacesClient(KEY)
-	types = ["tourist_attraction", "university"]
+	types = ["tourist_attraction", "university", "park", "subway_station", "transit_station", "school", "library", "embassy", "courthouse", "city_hall"]
 	places = client.convert_coords(40.73090439289119, -73.99732690284772, types)
 	name = places[0]['name']
 	summary = client.get_summary(name)
