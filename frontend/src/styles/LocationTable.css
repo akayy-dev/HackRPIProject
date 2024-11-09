@@ -1,0 +1,60 @@
+/* src/styles/NearbyOptionsTable.css */
+
+.nearby-options {
+    margin-top: 20px;
+  }
+  
+  .nearby-options table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .nearby-options th, .nearby-options td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .nearby-options th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .nearby-options img {
+    border-radius: 5px;
+  }
+
+  .description {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  
+  .expanded {
+    max-height: 100px; /* Adjust to fit description length */
+  }
+  .description-preview {
+    color: blue;
+    text-decoration: underline;
+  }
+  
+  .expand-icon {
+    margin-left: 5px;
+    font-size: 0.8em;
+  }
+  
+  .description-cell {
+    background-color: #f9f9f9;
+    padding: 10px;
+  }
+  
+  .description-content {
+    max-height: none;
+    overflow: visible;
+    transition: max-height 0.3s ease;
+  }  
+  
+  tr.expanded .description-content {
+    max-height: 100px; /* Adjust based on content */
+  }
+  
