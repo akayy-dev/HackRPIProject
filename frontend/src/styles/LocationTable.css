@@ -38,6 +38,10 @@
     text-decoration: underline;
   }
   
+  tr.expanded .description-content {
+    max-height: 100px; /* Adjust based on content */
+  }
+  
   .expand-icon {
     margin-left: 5px;
     font-size: 0.8em;
@@ -52,9 +56,5 @@
     max-height: none;
     overflow: visible;
     transition: max-height 0.3s ease;
-  }  
-  
-  tr.expanded .description-content {
-    max-height: 100px; /* Adjust based on content */
   }
   
