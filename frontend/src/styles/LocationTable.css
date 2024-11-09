@@ -38,4 +38,23 @@
     text-decoration: underline;
   }
   
+  .expand-icon {
+    margin-left: 5px;
+    font-size: 0.8em;
+  }
+  
+  .description-cell {
+    background-color: #f9f9f9;
+    padding: 10px;
+  }
+  
+  .description-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  tr.expanded .description-content {
+    max-height: 100px; /* Adjust based on content */
+  }
   
