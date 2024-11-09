@@ -1,6 +1,7 @@
 // src/components/login/loginForm.js
 
 import React, { useState } from 'react';
+import { getUser } from '../../services/userService';
 import '../../styles/loginForm.css';
 
 const LoginForm = ({ onLogin, setNotification }) => {
@@ -9,9 +10,10 @@ const LoginForm = ({ onLogin, setNotification }) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const user = JSON.parse(sessionStorage.getItem('user'));
+    const savedUser = getUser();
+    console.log('Retrieved user from sessionStorage:', savedUser);  // Debugging line
 
-    if (user && user.username === username && user.password === password) {
+    if (savedUser && savedUser.username === username && savedUser.password === password) {
       onLogin();
     } else {
       setNotification({ message: 'Invalid username or password', type: 'error' });
@@ -35,7 +37,7 @@ const LoginForm = ({ onLogin, setNotification }) => {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      <button className="login-button" onClick={handleLogin}>Log In</button>
+      <button onClick={handleLogin}>Log In</button>
     </div>
   );
 };

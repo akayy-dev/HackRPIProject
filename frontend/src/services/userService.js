@@ -1,15 +1,15 @@
 // src/services/userService.js
 
-export const getUserData = () => {
-    const user = sessionStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
-  };
-  
-  export const setUserData = (userData) => {
-    sessionStorage.setItem('user', JSON.stringify(userData));
-  };
-  
-  export const clearUserData = () => {
-    sessionStorage.removeItem('user');
-  };
-  
+export const saveUser = (user) => {
+  localStorage.setItem('user', JSON.stringify(user));
+};
+
+export const getUser = () => {
+  const user = localStorage.getItem('user');
+  return user ? JSON.parse(user) : null;
+};
+
+export const clearUser = () => {
+  localStorage.removeItem('user');
+};
+

@@ -1,6 +1,7 @@
 // src/components/signup/signupForm.js
 
 import React, { useState } from 'react';
+import { saveUser } from '../../services/userService';
 import '../../styles/signupForm.css';
 
 const SignupForm = ({ onLogin, setNotification }) => {
@@ -37,10 +38,9 @@ const SignupForm = ({ onLogin, setNotification }) => {
   };
 
   const handleSignup = () => {
-    sessionStorage.setItem(
-      'user',
-      JSON.stringify({ username, password, dietaryPreferences, disabilities })
-    );
+    const userData = { username, password, dietaryPreferences, disabilities };
+    saveUser(userData);
+    console.log('User saved to sessionStorage:', userData);  // Debugging line
     onLogin(); // Log in after successful signup
   };
 
