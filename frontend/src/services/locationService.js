@@ -15,20 +15,30 @@ export const fetchLocationData = async (lat, long) => {
 };
 
 export const getGeolocation = () => {
-  return new Promise((resolve, reject) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          resolve({ latitude, longitude });
-        },
-        (error) => {
-          console.error('Error getting geolocation:', error);
-          reject('Error getting geolocation');
-        }
-      );
-    } else {
-      reject('Geolocation is not supported by your browser');
-    }
+  return new Promise((resolve) => {
+    // Hardcoded coordinates for testing
+    resolve({
+      latitude: 40.73090439289119,
+      longitude: -73.99732690284772,
+    });
   });
 };
+
+// export const getGeolocation = () => {
+//   return new Promise((resolve, reject) => {
+//     if (navigator.geolocation) {
+//       navigator.geolocation.getCurrentPosition(
+//         (position) => {
+//           const { latitude, longitude } = position.coords;
+//           resolve({ latitude, longitude });
+//         },
+//         (error) => {
+//           console.error('Error getting geolocation:', error);
+//           reject('Error getting geolocation');
+//         }
+//       );
+//     } else {
+//       reject('Geolocation is not supported by your browser');
+//     }
+//   });
+// };
