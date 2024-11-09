@@ -1,4 +1,6 @@
 import googlemaps
+import wikipedia
+from os import getenv
 
 class PlacesClient:
 	def __init__(self, API_KEY: str):
@@ -27,12 +29,29 @@ class PlacesClient:
 							}
 							places.append(place_json)
 		return places
+	def get_summary(self, place: str):
+		"""Get a summary of a place from wikipedia, if the page doesn't exist, return none."""
+		page: wikipedia.WikipediaPage = None
+		try:
+			page = wikipedia.page(place)
+		except wikipedia.exceptions.PageError:
+			print("Page Not Found")
+			return None
+		
+		response = {
+			'page_title': page.title,
+			"page_url": page.url,
+			"summary": page.summary,
+			"content": page.content
+			}
+		return response
 
 
 if __name__ == '__main__':
-	client = PlacesClient('AIzaSyAnVknmf5xdz1jg0H0_CJvcCU7h_kW6pcU')
+	KEY = getenv("PLACES_API_KEY")
+	client = PlacesClient(KEY)
 	types = ["tourist_attraction", "university"]
 	places = client.convert_coords(40.73090439289119, -73.99732690284772, types)
-	print(places)
-						
-
+	name = places[0]['name']
+	summary = client.get_summary(name)
+	print(summary["summary"])
