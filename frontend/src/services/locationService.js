@@ -13,3 +13,22 @@ export const fetchLocationData = async (lat, long) => {
     throw error;
   }
 };
+
+export const getGeolocation = () => {
+  return new Promise((resolve, reject) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          resolve({ latitude, longitude });
+        },
+        (error) => {
+          console.error('Error getting geolocation:', error);
+          reject('Error getting geolocation');
+        }
+      );
+    } else {
+      reject('Geolocation is not supported by your browser');
+    }
+  });
+};

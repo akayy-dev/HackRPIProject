@@ -1,0 +1,18 @@
+/* src/styles/emissionsTracker.css */
+
+.emissions-tracker {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.chart {
+  margin-top: 20px;
+}
+
+.chart h3 {
+  color: #007bff;
+  font-size: 1.2em;
+}

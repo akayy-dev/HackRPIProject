@@ -1,0 +1,40 @@
+/* src/styles/shop.css */
+
+.shop {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.shop ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+.shop li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.shop li:last-child {
+  border-bottom: none;
+}
+
+.shop button {
+  padding: 6px 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.shop button:hover {
+  background-color: #218838;
+}

@@ -1,12 +1,22 @@
-/* src/styles/locationDisplay.css */
+/* src/components/locationDisplay.css */
 
 .location-display {
-    text-align: center;
-  }
-  
-  .location-display img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
-  
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.location-display h1 {
+  color: #007bff;
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.location-display img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 15px;
+}
