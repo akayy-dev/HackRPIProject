@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import LocationDisplay from './components/locationDisplay';
-import NearbyOptionsTable from './components/NearbyOptionsTable';
+import NearbyOptionsTable from './components/LocationTable';
 import EmissionsTracker from './components/EmissionsTracker';
 import Shop from './components/Shop';
 import LoginForm from './components/login/loginForm';
 import SignupForm from './components/signup/signupForm';
 import Notification from './components/notification';
-import './styles/app.css';
+import './styles/App.css';
 
 const MainApp = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem('user') !== null);

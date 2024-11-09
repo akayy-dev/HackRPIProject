@@ -4,8 +4,16 @@ import axios from 'axios';
 
 export const fetchLocationData = async (lat, long) => {
   try {
+    // Ensure lat and long are numbers
+    const latitude = parseFloat(lat);
+    const longitude = parseFloat(long);
+
+    if (isNaN(latitude) || isNaN(longitude)) {
+      throw new Error("Invalid latitude or longitude values");
+    }
+
     const response = await axios.get('http://127.0.0.1:8080/get_nearby', {
-      params: { lat, long },
+      params: { lat: latitude, long: longitude },
     });
     return response.data;
   } catch (error) {

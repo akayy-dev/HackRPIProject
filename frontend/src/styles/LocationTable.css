@@ -23,4 +23,19 @@
   .nearby-options img {
     border-radius: 5px;
   }
+
+  .description {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  
+  .expanded {
+    max-height: 100px; /* Adjust to fit description length */
+  }
+  .description-preview {
+    color: blue;
+    text-decoration: underline;
+  }
+  
   
