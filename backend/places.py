@@ -50,7 +50,7 @@ class PlacesClient:
 if __name__ == '__main__':
 	KEY = getenv("PLACES_API_KEY")
 	client = PlacesClient(KEY)
-	types = ["tourist_attraction", "university", "park", "subway_station", "transit_station", "school", "library", "embassy", "courthouse", "city_hall"]
+	types = ["tourist_attraction", "university", "park", "subway_station", "transit_station", "school", "library", "embassy", "courthouse", "city_hall", "restaurant"]
 	places = client.convert_coords(40.73090439289119, -73.99732690284772, types)
 	name = places[0]['name']
 	summary = client.get_summary(name)

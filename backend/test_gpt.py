@@ -5,10 +5,8 @@ fake_input = "Trattoria Bella Napoli, nestled at 145 Via Roma in the heart of Fl
 
 api_key = getenv("OPENAI_KEY")
 
-old_asst_key = "asst_zMFzykFnemJYvtjCDG3sxYcb"
+asst_key = "asst_htakfV60aT4R0yLeDuoI87zF"
 
-new_asst_key = "asst_7BTuzxjhdgUxWcvMZOQbwmsg"
-
-client = OpenAIClient(api_key, "asst_7BTuzxjhdgUxWcvMZOQbwmsg")
+client = OpenAIClient(api_key, asst_key)
 response = client.get_summary(fake_input)
 print(response)
