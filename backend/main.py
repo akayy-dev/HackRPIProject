@@ -1,5 +1,16 @@
 from fastapi import FastAPI
-import googlemaps
+import uvicorn
+from os import getenv
+from places import PlacesClient
 
 app = FastAPI()
 
+places = PlacesClient(getenv("PLACES_API_KEY"))
+
+@app.get('/get_nearby')
+def get_nearby(lat: float, long: float):
+	"""Take a pair of cooridnates and get a list of nearby locations"""
+	return places.convert_coords(lat, long, ["park"])
+
+if __name__ == '__main__':
+	uvicorn.run("main:app", port=8080, reload=True)
