@@ -29,9 +29,10 @@ def get_nearby(lat: float, long: float):
 def get_place_info(name: str):
 	"""Get a summary of a place by searching wikipedia for it, if the page doesn't exist, return none."""
 	page_content = places.get_summary(name)
+	if page_content is None:
+		return None
 	if page_content.get("content"):
-		return openai.get_summary(page_content.get("summary"))
-	return places.get_summary(name)
+		return openai.get_summary(page_content.get("content"))
 
 if __name__ == '__main__':
 	uvicorn.run("main:app", port=8080, reload=True)
