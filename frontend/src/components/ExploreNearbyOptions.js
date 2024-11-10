@@ -4,6 +4,7 @@ const ExploreNearbyOptions = ({ nearbyPlaces, currentLocation }) => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [tripMode, setTripMode] = useState('');
   const [totalEmissions, setTotalEmissions] = useState(0);
+  const [trips, setTrips] = useState([]);
 
   const handlePlaceChange = (event) => {
     const place = nearbyPlaces.find((p) => p.name === event.target.value);
@@ -20,19 +21,16 @@ const ExploreNearbyOptions = ({ nearbyPlaces, currentLocation }) => {
       return;
     }
   
-    // Get origin coordinates from the first item in the nearbyPlaces array or fallback to currentLocation
     const origin = nearbyPlaces[0];
     const o_lat = origin?.lat || currentLocation?.lat;
     const o_long = origin?.long || currentLocation?.long;
   
-    // Check if origin coordinates are available
     if (o_lat == null || o_long == null) {
-      console.error("Origin coordinates are undefined. Please ensure location data is available.");
-      alert("Origin coordinates are missing. Please check your location settings.");
+      console.error("Origin coordinates are undefined.");
+      alert("Origin coordinates are missing.");
       return;
     }
   
-    // Ensure the selected place has valid destination coordinates
     const { lat: d_lat, long: d_long } = selectedPlace;
     if (d_lat == null || d_long == null) {
       console.error("Selected place does not have valid coordinates:", selectedPlace);
@@ -52,11 +50,15 @@ const ExploreNearbyOptions = ({ nearbyPlaces, currentLocation }) => {
         return response.json();
       })
       .then((data) => {
-        console.log("Response data:", data); // Log the entire response data to check its structure
-        const emissions = data; // Directly use the response data
-  
-        if (emissions != null) { // Check if emissions data exists
+        const emissions = data;
+        if (emissions != null) {
           setTotalEmissions((prevTotal) => prevTotal + emissions);
+
+          // Add new trip to the trips array for tracking
+          setTrips((prevTrips) => [
+            ...prevTrips,
+            { start: currentLocation.name || "Current Location", destination: selectedPlace.name, emissions }
+          ]);
         } else {
           console.error("Emissions data is missing in the response:", data);
         }
@@ -66,7 +68,6 @@ const ExploreNearbyOptions = ({ nearbyPlaces, currentLocation }) => {
       });
   };
   
-
   return (
     <div>
       <h3>Total Emissions: {totalEmissions} kg CO₂</h3>
@@ -95,6 +96,26 @@ const ExploreNearbyOptions = ({ nearbyPlaces, currentLocation }) => {
       </div>
 
       <button onClick={createTrip}>Create Trip</button>
+
+      <h2>Emissions Tracker</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Start Place</th>
+            <th>Destination</th>
+            <th>CO₂ Emissions (kg)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {trips.map((trip, index) => (
+            <tr key={index}>
+              <td>{trip.start}</td>
+              <td>{trip.destination}</td>
+              <td>{trip.emissions.toFixed(2)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
