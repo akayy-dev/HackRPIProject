@@ -24,6 +24,8 @@ class PlacesClient:
 							place_json = {
 								'name': result['name'],
 								'type': place_type,
+								'lat': result['geometry']['location']['lat'],
+								'long': result['geometry']['location']['lng'],
 								'address': result['vicinity'], # test this actually works before deploying
 								'image': image_url
 							}
