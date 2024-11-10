@@ -70,7 +70,7 @@ const ExploreNearbyOptions = ({ nearbyPlaces, currentLocation }) => {
   
   return (
     <div>
-      <h3>Total Emissions: {totalEmissions} kg CO₂</h3>
+      <h3>Total Emissions: {parseFloat(totalEmissions).toFixed(2)} kg CO₂</h3>
 
       <div>
         <label>Select a Place: </label>
