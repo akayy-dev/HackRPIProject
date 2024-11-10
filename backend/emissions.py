@@ -11,7 +11,7 @@ class EmisionsCalculator:
             'bus': 90,
             'rail': 50
         }
-        self.endpoint = getenv("ENDPOINT")
+        self.endpoint = "https://maps.googleapis.com/maps/api/directions/json"
         
     def get_dist_metric(self, origin: str, destination: str, mode: str, transit_mode: str = None) -> float:
         """
