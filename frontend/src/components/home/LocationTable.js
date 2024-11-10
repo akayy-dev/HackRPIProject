@@ -1,58 +1,38 @@
-import React, { useState, useEffect } from "react";
-import { fetchLocationData, getGeolocation, fetchPlaceInfo } from "../../services/locationService";
-import "../../styles/LocationTable.css";
-import Markdown from "react-markdown";
-import ExploreNearbyOptions from "./ExploreNearbyOptions"; // Import the new component
+// src/components/LocationTable.js
 
-const LocationTable = () => {
-  const [places, setPlaces] = useState([]);
-  const [error, setError] = useState(null);
+import React, { useState } from "react";
+import Markdown from "react-markdown";
+import "../../styles/LocationTable.css";
+
+const LocationTable = ({ nearbyPlaces }) => {
   const [expandedRows, setExpandedRows] = useState({});
   const [loadingRows, setLoadingRows] = useState({});
-
-  useEffect(() => {
-    const loadNearbyPlaces = async () => {
-      try {
-        const { latitude, longitude } = await getGeolocation();
-        const data = await fetchLocationData(latitude, longitude);
-
-        setPlaces(data);
-      } catch (error) {
-        setError(error);
-      }
-    };
-
-    loadNearbyPlaces();
-  }, []);
 
   const toggleRow = async (index) => {
     if (loadingRows[index]) return;
 
     setExpandedRows((prev) => ({ ...prev, [index]: !prev[index] }));
-    if (!places[index].description) {
+    if (!nearbyPlaces[index].description) {
       setLoadingRows((prev) => ({ ...prev, [index]: true }));
 
       try {
-        const description = await fetchPlaceInfo(places[index].name);
-        setPlaces((prevPlaces) =>
+        const description = await fetchPlaceInfo(nearbyPlaces[index].name);
+        setNearbyPlaces((prevPlaces) =>
           prevPlaces.map((place, i) =>
             i === index ? { ...place, description } : place
           )
         );
       } catch (error) {
-        console.error(`Error fetching description for ${places[index].name}:`, error);
+        console.error(`Error fetching description for ${nearbyPlaces[index].name}:`, error);
       } finally {
         setLoadingRows((prev) => ({ ...prev, [index]: false }));
       }
     }
   };
 
-  if (error) return <p>{error}</p>;
-
   return (
     <div className="nearby-options">
       <h2>Explore Nearby Options</h2>
-      <ExploreNearbyOptions nearbyPlaces={places} currentLocation={{ /* specify current location here */ }} />
       <table>
         <thead>
           <tr>
@@ -63,7 +43,7 @@ const LocationTable = () => {
           </tr>
         </thead>
         <tbody>
-          {places.map((place, index) => (
+          {nearbyPlaces.map((place, index) => (
             <React.Fragment key={index}>
               <tr>
                 <td onClick={() => toggleRow(index)} style={{ cursor: "pointer" }}>

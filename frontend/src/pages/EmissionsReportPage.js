@@ -1,12 +1,12 @@
 // src/pages/EmissionsReportPage.js
 
 import React from 'react';
-import EmissionsTracker from '../components/emissions/EmissionsTracker';
+import ExploreNearbyOptions from '../components/emissions/EmissionsTracker.js';
 
-const EmissionsReportPage = () => (
+const EmissionsReportPage = ({ trips }) => (
   <div>
     <h1>Emissions Report</h1>
-    <EmissionsTracker />
+    <ExploreNearbyOptions trips={trips} />
   </div>
 );
 

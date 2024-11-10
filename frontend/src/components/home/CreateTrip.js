@@ -1,4 +1,3 @@
-// src/components/home/CreateTrip.js
 import React, { useState } from 'react';
 import { createTripEmissions } from '../../services/emissionsService';
 
@@ -13,10 +12,12 @@ const CreateTrip = ({ setNotification }) => {
     }
     try {
       const origin = { lat: 40.73061, long: -73.935242 }; // Example origin; replace with dynamic data
+      console.log("Creating trip with:", origin, selectedPlace, tripMode);
       const emissions = await createTripEmissions(origin, selectedPlace, tripMode);
-      // Optionally: Pass emissions data to EmissionsTracker via a global state or context
+      console.log("Emissions for trip:", emissions);
       setNotification({ message: 'Trip created and emissions updated!', type: 'success' });
     } catch (error) {
+      console.error("Error creating trip emissions:", error);
       setNotification({ message: 'Error creating trip emissions.', type: 'error' });
     }
   };
@@ -24,7 +25,6 @@ const CreateTrip = ({ setNotification }) => {
   return (
     <div>
       <h2>Create a Trip</h2>
-      {/* Inputs for selecting place and mode */}
       <button onClick={handleCreateTrip}>Create Trip</button>
     </div>
   );

@@ -1,13 +1,13 @@
-// src/components/emissions/EmissionsTracker.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const EmissionsTracker = () => {
   const [trips, setTrips] = useState([]);
 
-  const addTrip = (start, destination, emissions) => {
-    const newTrip = { start, destination, emissions };
-    setTrips((prevTrips) => [...prevTrips, newTrip]);
-  };
+  useEffect(() => {
+    // Load trips from local storage on component mount
+    const savedTrips = JSON.parse(localStorage.getItem('trips')) || [];
+    setTrips(savedTrips);
+  }, []);
 
   return (
     <div>
