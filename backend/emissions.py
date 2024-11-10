@@ -44,6 +44,6 @@ class EmissionsCalculator:
         origin = f'{o_lat}, {o_long}'
         destination = f'{d_lat}, {d_long}'
         distance = self.get_dist_metric(origin, destination, mode)
-        return distance * self.ems_consts['mode']
+        return distance * self.ems_consts[mode]
 
         
