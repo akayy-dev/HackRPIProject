@@ -1,4 +1,5 @@
 // src/pages/EmissionsReportPage.js
+
 import React from 'react';
 import EmissionsTracker from '../components/emissions/EmissionsTracker';
 

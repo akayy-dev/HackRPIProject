@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { fetchLocationData, getGeolocation, fetchPlaceInfo } from "../../services/locationService";
 import "../../styles/LocationTable.css";
 import Markdown from "react-markdown";
-import ExploreNearbyOptions from "../ExploreNearbyOptions"; // Import the new component
+import ExploreNearbyOptions from "./ExploreNearbyOptions"; // Import the new component
 
 const LocationTable = () => {
   const [places, setPlaces] = useState([]);

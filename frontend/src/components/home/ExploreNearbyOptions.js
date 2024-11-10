@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+// src/components/home/ExploreNearbyOptions.js
 
-const ExploreNearbyOptions = ({ nearbyPlaces, currentLocation }) => {
+import React, { useState } from 'react';
+import { createTripEmissions } from '../../services/emissionsService';
+
+const ExploreNearbyOptions = ({ nearbyPlaces = [], currentLocation }) => { // Default nearbyPlaces to []
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [tripMode, setTripMode] = useState('');
   const [totalEmissions, setTotalEmissions] = useState(0);
@@ -15,59 +18,27 @@ const ExploreNearbyOptions = ({ nearbyPlaces, currentLocation }) => {
     setTripMode(event.target.value);
   };
 
-  const createTrip = () => {
+  const createTrip = async () => {
     if (!selectedPlace || !tripMode) {
       alert("Please select a place and travel mode.");
       return;
     }
-  
-    const origin = nearbyPlaces[0];
-    const o_lat = origin?.lat || currentLocation?.lat;
-    const o_long = origin?.long || currentLocation?.long;
-  
-    if (o_lat == null || o_long == null) {
-      console.error("Origin coordinates are undefined.");
-      alert("Origin coordinates are missing.");
-      return;
-    }
-  
-    const { lat: d_lat, long: d_long } = selectedPlace;
-    if (d_lat == null || d_long == null) {
-      console.error("Selected place does not have valid coordinates:", selectedPlace);
-      alert("The selected place does not have valid coordinates.");
-      return;
-    }
-  
-    const queryString = `o_lat=${o_lat}&o_long=${o_long}&d_lat=${d_lat}&d_long=${d_long}&mode=${tripMode}`;
-  
-    fetch(`http://127.0.0.1:8080/get_trip_emissions?${queryString}`, {
-      method: 'POST',
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const emissions = data;
-        if (emissions != null) {
-          setTotalEmissions((prevTotal) => prevTotal + emissions);
+    
+    const origin = { lat: currentLocation?.lat, long: currentLocation?.long };
+    const destination = { lat: selectedPlace.lat, long: selectedPlace.long };
 
-          // Add new trip to the trips array for tracking
-          setTrips((prevTrips) => [
-            ...prevTrips,
-            { start: currentLocation.name || "Current Location", destination: selectedPlace.name, emissions }
-          ]);
-        } else {
-          console.error("Emissions data is missing in the response:", data);
-        }
-      })
-      .catch((error) => {
-        console.error('Error creating trip:', error);
-      });
+    try {
+      const emissions = await createTripEmissions(origin, destination, tripMode);
+      setTotalEmissions((prevTotal) => prevTotal + emissions);
+      setTrips((prevTrips) => [
+        ...prevTrips,
+        { start: currentLocation.name, destination: selectedPlace.name, emissions }
+      ]);
+    } catch (error) {
+      console.error('Error creating trip:', error);
+    }
   };
-  
+
   return (
     <div>
       <h3>Total Emissions: {parseFloat(totalEmissions).toFixed(2)} kg CO₂</h3>
