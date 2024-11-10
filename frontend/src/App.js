@@ -10,19 +10,14 @@ import AuthForm from './components/auth/AuthForm';
 import './styles/App.css';
 
 const App = () => {
-  // Initialize login state based on session storage
   const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem('user') !== null);
-  const [formType, setFormType] = useState('login'); // Toggle between login and signup
   const [notification, setNotification] = useState({ message: '', type: '' });
 
-  // Mock credentials for demonstration (for login form validation)
   const correctUsername = 'user';
   const correctPassword = 'password';
 
-  // Handle form submission for login/signup
-  const handleAuthSubmit = ({ username, password }) => {
+  const handleAuthSubmit = ({ username, password }, formType) => {
     if (formType === 'login') {
-      // Mock login validation
       if (username === correctUsername && password === correctPassword) {
         sessionStorage.setItem('user', username);
         setIsLoggedIn(true);
@@ -31,23 +26,16 @@ const App = () => {
         setNotification({ message: 'Incorrect username or password', type: 'error' });
       }
     } else if (formType === 'signup') {
-      // Mock signup action (you could add actual signup logic here)
       sessionStorage.setItem('user', username);
       setIsLoggedIn(true);
       setNotification({ message: 'Signup successful!', type: 'success' });
     }
   };
 
-  // Logout function to clear session and update state
   const handleLogout = () => {
-    sessionStorage.removeItem('user'); // Clear user data from storage
-    setIsLoggedIn(false); // Update login state
+    sessionStorage.removeItem('user');
+    setIsLoggedIn(false);
     setNotification({ message: 'Logged out successfully.', type: 'success' });
-  };
-
-  // Toggle between login and signup forms
-  const toggleFormType = () => {
-    setFormType((prevType) => (prevType === 'login' ? 'signup' : 'login'));
   };
 
   return (
@@ -63,10 +51,7 @@ const App = () => {
         </>
       ) : (
         <div className="auth-container">
-          <AuthForm onSubmit={handleAuthSubmit} formType={formType} setNotification={setNotification} />
-          <button onClick={toggleFormType}>
-            {formType === 'login' ? 'Switch to Sign Up' : 'Switch to Log In'}
-          </button>
+          <AuthForm onSubmit={handleAuthSubmit} setNotification={setNotification} />
           {notification.message && <p className={`notification ${notification.type}`}>{notification.message}</p>}
         </div>
       )}

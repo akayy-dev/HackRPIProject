@@ -1,49 +1,61 @@
+// src/components/auth/AuthForm.js
+
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import '../../styles/authForm.css';
 
-const AuthForm = ({ onSubmit, formType, setNotification }) => {
+const AuthForm = ({ onSubmit, setNotification }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e, formType) => {
     e.preventDefault();
-    if (formType === 'signup' && password !== confirmPassword) {
-      setNotification({ message: 'Passwords do not match!', type: 'error' });
-      return;
-    }
-    onSubmit({ username, password });
+    onSubmit({ username, password }, formType);
   };
 
   return (
     <div className="auth-form">
-      <h2>{formType === 'login' ? 'Log In' : 'Sign Up'}</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      {formType === 'signup' && (
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
-      )}
-      <button onClick={handleSubmit}>{formType === 'login' ? 'Log In' : 'Sign Up'}</button>
+      <img src="/image.png" alt="Logo" className="auth-logo" />
+      <h2>GREEN_TAG</h2>
+      <p>Track → Earn Points → Redeem</p>
+      <form>
+        <div className="input-group">
+          <label>Email ID</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="student@school.edu"
+          />
+        </div>
+        <div className="input-group">
+          <label>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+          />
+        </div>
+        <div className="button-group">
+          <button type="button" onClick={(e) => handleSubmit(e, 'login')} className="auth-submit">
+            Login
+          </button>
+          <button type="button" onClick={(e) => handleSubmit(e, 'signup')} className="auth-submit">
+            Sign Up
+          </button>
+        </div>
+      </form>
+      <button onClick={() => setNotification({ message: 'Forgot password?', type: 'info' })}>
+        Forgot Password?
+      </button>
     </div>
   );
+};
+
+AuthForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  setNotification: PropTypes.func.isRequired,
 };
 
 export default AuthForm;
