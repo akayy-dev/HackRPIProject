@@ -1,10 +1,6 @@
 import requests
 from os import getenv
 
-# Set up your API key and endpoint
-api_key = getenv("GOOG_KEY")
-endpoint = 'https://maps.googleapis.com/maps/api/distancematrix/json'
-
 class EmmisionsCalculator:
     def __init__(self, GOOG_KEY:str):
         self.api_key = GOOG_KEY
@@ -15,6 +11,7 @@ class EmmisionsCalculator:
             'bus': 90,
             'rail': 50
         }
+        self.endpoint = getenv("ENDPOINT")
         
     def get_dist_metric(self, origin: str, destination: str, mode: str, transit_mode: str = None) -> float:
         """
