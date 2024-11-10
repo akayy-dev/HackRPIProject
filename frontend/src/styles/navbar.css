@@ -2,19 +2,44 @@
 
 .navbar {
   display: flex;
-  gap: 15px;
-  padding: 10px;
-  background-color: #333;
-}
-
-.nav-link, .logout-button {
+  align-items: center;
+  background-color: #1c1f24;
+  padding: 1rem;
   color: white;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
 }
 
-.nav-link:hover, .logout-button:hover {
-  color: #ddd;
+.nav-link {
+  color: white;
+  margin-right: 1.5rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  color: #4caf50;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  width: 50px;
+  height: auto;
+  margin-right: 1.5rem;
+}
+
+.logout-button {
+  margin-left: auto;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #45a049;
 }
