@@ -1,10 +1,10 @@
 import requests
 from os import getenv
 
-class EmmisionsCalculator:
+class EmisionsCalculator:
     def __init__(self, GOOG_KEY:str):
         self.api_key = GOOG_KEY
-        self.emms_consts = {
+        self.ems_consts = {
             'driving': 150,
             'walking': 0,
             'bicycling': 0,
@@ -37,7 +37,7 @@ class EmmisionsCalculator:
 
         return distance
 
-    def calc_emmisions(self, o_lat: float, o_long: float, d_lat: float, d_long: float, mode: str, transit_mode: str = None):
+    def calc_emisions(self, o_lat: float, o_long: float, d_lat: float, d_long: float, mode: str, transit_mode: str = None):
         """
         o_lat: Lattitude of the origin
         o_long: Longitude of the origin
@@ -50,9 +50,9 @@ class EmmisionsCalculator:
         destination = f'{d_lat}, {d_long}'
         distance = self.get_dist_metric(origin, destination, mode, transit_mode)
         if mode != 'transit':
-            return distance * self.emms_consts['mode']
+            return distance * self.ems_consts['mode']
         elif transit_mode == 'bus':
-            return distance * self.emms_consts['bus']
+            return distance * self.ems_consts['bus']
         elif transit_mode == 'rail':
-            return distance * self.emms_consts['rail']
+            return distance * self.ems_consts['rail']
         
