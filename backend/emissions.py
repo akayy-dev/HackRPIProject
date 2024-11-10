@@ -31,7 +31,7 @@ class EmmisionsCalculator:
             params['transit_mode'] = transit_mode
 
         # Make the request
-        response = requests.get(endpoint, params=params)
+        response = requests.get(self.endpoint, params=params)
         data = response.json()
         distance = data['routes'][0]['legs'][0]['distance']['value'] / 1000 #kms of the trip
 
