@@ -1,92 +1,111 @@
-import React, { useState, useEffect } from 'react';
-import { fetchLocationData, getGeolocation, fetchPlaceInfo } from '../services/locationService';
-import '../styles/LocationTable.css';
+import React, { useState, useEffect } from "react";
+import {
+	fetchLocationData,
+	getGeolocation,
+	fetchPlaceInfo,
+} from "../services/locationService";
+import "../styles/LocationTable.css";
+import Markdown from "react-markdown";
 
 const LocationTable = () => {
-  const [places, setPlaces] = useState([]);
-  const [error, setError] = useState(null);
-  const [expandedRows, setExpandedRows] = useState({});
+	const [places, setPlaces] = useState([]);
+	const [error, setError] = useState(null);
+	const [expandedRows, setExpandedRows] = useState({});
+	const [loadingRows, setLoadingRows] = useState({});
 
-  useEffect(() => {
-    const loadNearbyPlaces = async () => {
-      try {
-        const { latitude, longitude } = await getGeolocation();
-        const data = await fetchLocationData(latitude, longitude);
+	useEffect(() => {
+		const loadNearbyPlaces = async () => {
+			try {
+				const { latitude, longitude } = await getGeolocation();
+				const data = await fetchLocationData(latitude, longitude);
 
-        // Log the initial data fetched to verify structure
-        console.log("Initial places data:", data);
+				setPlaces(data);
+			} catch (error) {
+				setError(error);
+			}
+		};
 
-        // Populate the table initially with places data only
-        setPlaces(data);
+		loadNearbyPlaces();
+	}, []);
 
-        // Fetch description for each place and update each entry as it arrives
-        const updatedPlaces = await Promise.all(
-          data.map(async (place) => {
-            const description = await fetchPlaceInfo(place.name);
-            console.log(`Fetched description for ${place.name}:`, description); // Log each description
-            return { ...place, description };
-          })
-        );
+	const toggleRow = async (index) => {
+		// If a request is already in progress for this row, do nothing
+		if (loadingRows[index]) return;
 
-        // Log updated places with descriptions
-        console.log("Updated places with descriptions:", updatedPlaces);
-        setPlaces(updatedPlaces); // Update the state with descriptions
-      } catch (error) {
-        setError(error);
-      }
-    };
+		// Toggle row expansion and mark it as loading if no description exists
+		setExpandedRows((prev) => ({ ...prev, [index]: !prev[index] }));
+		if (!places[index].description) {
+			setLoadingRows((prev) => ({ ...prev, [index]: true }));
 
-    loadNearbyPlaces();
-  }, []);
+			try {
+				const description = await fetchPlaceInfo(places[index].name);
+				setPlaces((prevPlaces) =>
+					prevPlaces.map((place, i) =>
+						i === index ? { ...place, description } : place
+					)
+				);
+			} catch (error) {
+				console.error(
+					`Error fetching description for ${places[index].name}:`,
+					error
+				);
+			} finally {
+				// Remove loading state after description fetch completes
+				setLoadingRows((prev) => ({ ...prev, [index]: false }));
+			}
+		}
+	};
 
-  const toggleRow = (index) => {
-    console.log('Clicked row index:', index); // Log the clicked row index
-    setExpandedRows((prev) => ({ ...prev, [index]: !prev[index] }));
-  };
+	if (error) return <p>{error}</p>;
 
-  if (error) return <p>{error}</p>;
-
-  return (
-    <div className="nearby-options">
-      <h2>Explore Nearby Options</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Address</th>
-            <th>Image</th>
-          </tr>
-        </thead>
-        <tbody>
-          {places.map((place, index) => (
-            <React.Fragment key={index}>
-              <tr>
-                <td onClick={() => place.description && toggleRow(index)} style={{ cursor: place.description ? 'pointer' : 'default' }}>
-                  {place.name}
-                  {place.description && (
-                    <span className="expand-icon">{expandedRows[index] ? '▲' : '▼'}</span>
-                  )}
-                </td>
-                <td>{place.type}</td>
-                <td>{place.address}</td>
-                <td>
-                  <img src={place.image} alt={place.name} width="100" />
-                </td>
-              </tr>
-              {place.description && expandedRows[index] && (
-                <tr>
-                  <td colSpan="4" className="description-cell">
-                    <div className="description-content">{place.description}</div>
-                  </td>
-                </tr>
-              )}
-            </React.Fragment>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+	return (
+		<div className="nearby-options">
+			<h2>Explore Nearby Options</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Address</th>
+						<th>Image</th>
+					</tr>
+				</thead>
+				<tbody>
+					{places.map((place, index) => (
+						<React.Fragment key={index}>
+							<tr>
+								<td
+									onClick={() => toggleRow(index)}
+									style={{ cursor: "pointer" }}
+								>
+									{place.name}
+									{expandedRows[index] ? " ▲" : " ▼"}
+								</td>
+								<td>{place.type}</td>
+								<td>{place.address}</td>
+								<td>
+									<img src={place.image} alt={place.name} width="100" />
+								</td>
+							</tr>
+							{expandedRows[index] && (
+								<tr>
+									<td colSpan="4" className="description-cell">
+										{loadingRows[index] ? (
+											<div className="loading-spinner"></div> // Show loading spinner while fetching
+										) : (
+											<div className="description-content">
+												<Markdown>{place.description}</Markdown>
+											</div>
+										)}
+									</td>
+								</tr>
+							)}
+						</React.Fragment>
+					))}
+				</tbody>
+			</table>
+		</div>
+	);
 };
 
 export default LocationTable;

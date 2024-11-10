@@ -13,19 +13,16 @@ export const fetchLocationData = async (lat, long) => {
 };
 
 export const fetchPlaceInfo = async (placeName) => {
-  // try {
-  //   const response = await axios.get(`http://127.0.0.1:8080/get_place_info`, {
-  //     params: { placeName: encodeURIComponent(placeName) },
-  //   });
-  //   return response.data || null;
-  // } catch (error) {
-  //   console.error(`Error fetching info for ${placeName}:`, error);
-  //   return null;
-  // }
-  // Test with a static place name without spaces
-const response = await axios.get('http://127.0.0.1:8080/get_place_info?name=Washington%20Square%20Park');
-
-return response.data;
+  try {
+    // Dynamically encode `placeName` to ensure compatibility with URL
+    const response = await axios.get('http://127.0.0.1:8080/get_place_info', {
+      params: { name: placeName },
+    });
+    return response.data || null;
+  } catch (error) {
+    console.error(`Error fetching info for ${placeName}:`, error);
+    return null;
+  }
 };
 
 
