@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import TripForm from '../components/emissions/TripForm';
 import LocationTable from '../components/home/LocationTable.js';
+import LocationDisplay from '../components/home/LocationDisplay.js';
 import { getGeolocation, fetchLocationData } from '../services/locationService';
 
 const HomePage = () => {
@@ -34,7 +35,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <h1>Home Page</h1>
+      <LocationDisplay />
       {currentLocation && (
         <TripForm nearbyPlaces={nearbyPlaces} currentLocation={currentLocation} addTrip={addTrip} />
       )}

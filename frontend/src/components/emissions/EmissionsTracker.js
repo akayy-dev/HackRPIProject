@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../../styles/emissionsTracker.css';
 
 const EmissionsTracker = () => {
   const [trips, setTrips] = useState([]);
@@ -10,7 +11,7 @@ const EmissionsTracker = () => {
   }, []);
 
   return (
-    <div>
+    <div className="emissions-tracker">
       <h2>Emissions Tracker</h2>
       <table>
         <thead>
