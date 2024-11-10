@@ -20,56 +20,51 @@ const ExploreNearbyOptions = ({ nearbyPlaces, currentLocation }) => {
       return;
     }
   
-    // Get origin coordinates from the first item in the nearbyPlaces array
+    // Get origin coordinates from the first item in the nearbyPlaces array or fallback to currentLocation
     const origin = nearbyPlaces[0];
-    const o_lat = origin?.lat || currentLocation.lat;
-    const o_long = origin?.long || currentLocation.long;
+    const o_lat = origin?.lat || currentLocation?.lat;
+    const o_long = origin?.long || currentLocation?.long;
+  
+    // Check if origin coordinates are available
+    if (o_lat == null || o_long == null) {
+      console.error("Origin coordinates are undefined. Please ensure location data is available.");
+      alert("Origin coordinates are missing. Please check your location settings.");
+      return;
+    }
   
     // Ensure the selected place has valid destination coordinates
-    if (selectedPlace.lat == null || selectedPlace.long == null) {
+    const { lat: d_lat, long: d_long } = selectedPlace;
+    if (d_lat == null || d_long == null) {
       console.error("Selected place does not have valid coordinates:", selectedPlace);
       alert("The selected place does not have valid coordinates.");
       return;
     }
   
-    const { lat: d_lat, long: d_long } = selectedPlace; // Directly use selectedPlace's lat and long
+    const queryString = `o_lat=${o_lat}&o_long=${o_long}&d_lat=${d_lat}&d_long=${d_long}&mode=${tripMode}`;
   
-    const tripData = {
-      o_lat,
-      o_long,
-      d_lat,
-      d_long,
-      mode: tripMode,
-      transit_mode: tripMode === 'public_transportation' ? 'bus' : null,
-    };
-  
-    console.log('Creating trip with data:', {
-      o_lat,
-      o_long,
-      d_lat,
-      d_long,
-      mode: tripMode,
-    });
-  
-    fetch('http://127.0.0.1:8080/get_trip_emissions', {
+    fetch(`http://127.0.0.1:8080/get_trip_emissions?${queryString}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(tripData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => {
-        const emissions = data.emissions;
-        setTotalEmissions((prevTotal) => prevTotal + emissions);
+        console.log("Response data:", data); // Log the entire response data to check its structure
+        const emissions = data; // Directly use the response data
+  
+        if (emissions != null) { // Check if emissions data exists
+          setTotalEmissions((prevTotal) => prevTotal + emissions);
+        } else {
+          console.error("Emissions data is missing in the response:", data);
+        }
       })
       .catch((error) => {
         console.error('Error creating trip:', error);
       });
   };
-  
-  
-  
   
 
   return (
@@ -93,8 +88,8 @@ const ExploreNearbyOptions = ({ nearbyPlaces, currentLocation }) => {
         <select value={tripMode} onChange={handleModeChange}>
           <option value="">Select Mode</option>
           <option value="walking">Walking</option>
-          <option value="biking">Biking</option>
-          <option value="public_transportation">Public Transportation</option>
+          <option value="bicycling">Biking</option>
+          <option value="transit">Public Transportation</option>
           <option value="driving">Driving</option>
         </select>
       </div>
