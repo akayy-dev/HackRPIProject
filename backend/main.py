@@ -37,8 +37,8 @@ def get_place_info(name: str):
 		return openai.get_summary(page_content.get("content"))
 	
 @app.get('/get_trip_emmisions')
-def get_trip_emisions(o_lat: float, o_long: float, d_lat: float, d_long: float, mode: str, transit_mode: str = None):
-	return em_calc.calc_emisions(o_lat, o_long, d_lat, d_long, mode, transit_mode)
+def get_trip_emisions(o_lat: float, o_long: float, d_lat: float, d_long: float, mode: str):
+	return em_calc.calc_emisions(o_lat, o_long, d_lat, d_long, mode)
 
 if __name__ == '__main__':
 	uvicorn.run("main:app", port=8080, reload=True)

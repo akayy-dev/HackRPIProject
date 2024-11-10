@@ -8,17 +8,15 @@ class EmisionsCalculator:
             'driving': 150,
             'walking': 0,
             'bicycling': 0,
-            'bus': 90,
-            'rail': 50
+            'transit': 60
         }
         self.endpoint = "https://maps.googleapis.com/maps/api/directions/json"
         
-    def get_dist_metric(self, origin: str, destination: str, mode: str, transit_mode: str = None) -> float:
+    def get_dist_metric(self, origin: str, destination: str, mode: str) -> float:
         """
         origin: The long and lat cords of the originating position as a string
         destination: The long and lat cords of the desired destination as a string
         mode: The mode of transportation in values 'driving', 'walking', 'bicycling', or 'transit'
-        transit_mode: Optional mode for the specific type of transit in values 'bus', 'rail'
         """
         params = {
             'origin': origin,
@@ -27,8 +25,6 @@ class EmisionsCalculator:
             'departure_time': 'now',
             'key': self.api_key
         }
-        if mode == 'transit':
-            params['transit_mode'] = transit_mode
 
         # Make the request
         response = requests.get(self.endpoint, params=params)
@@ -37,22 +33,17 @@ class EmisionsCalculator:
 
         return distance
 
-    def calc_emisions(self, o_lat: float, o_long: float, d_lat: float, d_long: float, mode: str, transit_mode: str = None):
+    def calc_emisions(self, o_lat: float, o_long: float, d_lat: float, d_long: float, mode: str):
         """
         o_lat: Lattitude of the origin
         o_long: Longitude of the origin
         d_lat: Lattitde of the destination
         d_long: Longitude of the destination
         mode: The mode of transportation in values 'driving', 'walking', 'bicycling', or 'transit'
-        transit_mode: Optional mode for the specific type of transit in values 'bus', 'rail'
         """
         origin = f'{o_lat}, {o_long}'
         destination = f'{d_lat}, {d_long}'
-        distance = self.get_dist_metric(origin, destination, mode, transit_mode)
-        if mode != 'transit':
-            return distance * self.ems_consts['mode']
-        elif transit_mode == 'bus':
-            return distance * self.ems_consts['bus']
-        elif transit_mode == 'rail':
-            return distance * self.ems_consts['rail']
+        distance = self.get_dist_metric(origin, destination, mode)
+        return distance * self.ems_consts['mode']
+
         
