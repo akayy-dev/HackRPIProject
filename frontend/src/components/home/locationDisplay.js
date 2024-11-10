@@ -1,7 +1,7 @@
 // src/components/locationDisplay.js
 
 import React, { useState, useEffect } from 'react';
-import { fetchLocationData, getGeolocation } from '../services/locationService';
+import { fetchLocationData, getGeolocation } from '../../services/locationService';
 
 const LocationDisplay = () => {
   const [location, setLocation] = useState(null);
