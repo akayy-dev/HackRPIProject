@@ -11,6 +11,7 @@ const HomePage = () => {
   const [trips, setTrips] = useState([]);
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [currentLocation, setCurrentLocation] = useState(null);
+  const [debugMode, setDebugMode] = useState(true);
 
   const addTrip = (trip) => {
     setTrips((prevTrips) => [...prevTrips, trip]);
@@ -19,7 +20,7 @@ const HomePage = () => {
   useEffect(() => {
     const loadLocationData = async () => {
       try {
-        const location = await getGeolocation();
+        const location = await getGeolocation(debugMode);
         setCurrentLocation(location);
 
         if (location) {
@@ -32,11 +33,14 @@ const HomePage = () => {
     };
 
     loadLocationData();
-  }, []);
+  }, [debugMode]);
 
   return (
     <div className="home-page">
-      <LocationDisplay />
+      <button onClick={() => setDebugMode(!debugMode)}>
+        {debugMode ? 'Disable Debug Mode' : 'Enable Debug Mode'}
+        </button>
+      <LocationDisplay debug={debugMode}/>
       {currentLocation && (
         <TripForm nearbyPlaces={nearbyPlaces} currentLocation={currentLocation} addTrip={addTrip} />
       )}

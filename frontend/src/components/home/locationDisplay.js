@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchLocationData, getGeolocation } from '../../services/locationService';
 
-const LocationDisplay = () => {
+const LocationDisplay = (debug) => {
   const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
 
