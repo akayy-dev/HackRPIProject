@@ -39,7 +39,7 @@ const HomePage = () => {
       {currentLocation && (
         <TripForm nearbyPlaces={nearbyPlaces} currentLocation={currentLocation} addTrip={addTrip} />
       )}
-      <LocationTable nearbyPlaces={nearbyPlaces} />
+      <LocationTable nearbyPlaces={nearbyPlaces} setNearbyPlaces={setNearbyPlaces} />
     </div>
   );
 };
