@@ -4,7 +4,7 @@ import uvicorn
 from os import getenv
 from places import PlacesClient
 from gpt import OpenAIClient
-from emissions import EmisionsCalculator
+from emissions import EmissionsCalculator
 
 app = FastAPI()
 
@@ -19,7 +19,7 @@ app.add_middleware(
 
 places = PlacesClient(getenv("PLACES_API_KEY"))
 openai = OpenAIClient(getenv("OPENAI_KEY"), getenv("ASST_KEY"))
-em_calc = EmisionsCalculator(getenv("GOOG_KEY"))
+em_calc = EmissionsCalculator(getenv("GOOG_KEY"))
 
 
 @app.get('/get_nearby')
@@ -36,9 +36,9 @@ def get_place_info(name: str):
 	if page_content.get("content"):
 		return openai.get_summary(page_content.get("content"))
 	
-@app.get('/get_trip_emmisions')
+@app.get('/get_trip_emissions')
 def get_trip_emisions(o_lat: float, o_long: float, d_lat: float, d_long: float, mode: str):
-	return em_calc.calc_emisions(o_lat, o_long, d_lat, d_long, mode)
+	return em_calc.calc_emissions(o_lat, o_long, d_lat, d_long, mode)
 
 if __name__ == '__main__':
 	uvicorn.run("main:app", port=8080, reload=True)

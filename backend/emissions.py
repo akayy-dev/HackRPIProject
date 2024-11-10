@@ -1,7 +1,7 @@
 import requests
 from os import getenv
 
-class EmisionsCalculator:
+class EmissionsCalculator:
     def __init__(self, GOOG_KEY:str):
         self.api_key = GOOG_KEY
         self.ems_consts = {
@@ -33,7 +33,7 @@ class EmisionsCalculator:
 
         return distance
 
-    def calc_emisions(self, o_lat: float, o_long: float, d_lat: float, d_long: float, mode: str):
+    def calc_emissions(self, o_lat: float, o_long: float, d_lat: float, d_long: float, mode: str):
         """
         o_lat: Lattitude of the origin
         o_long: Longitude of the origin
