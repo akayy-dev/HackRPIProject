@@ -47,13 +47,21 @@ class PlacesClient:
 			"content": page.content
 			}
 		return response
+	def get_location_from_coordinates(self, lat: float, lng: float) -> dict:
+		"""Get the human-readable address from coordinates"""
+		geocode_result = self.client.reverse_geocode((lat, lng))
+
+			
+		return geocode_result
 
 
 if __name__ == '__main__':
 	KEY = getenv("PLACES_API_KEY")
 	client = PlacesClient(KEY)
 	types = ["tourist_attraction", "university", "park", "subway_station", "transit_station", "school", "library", "embassy", "courthouse", "city_hall", "restaurant"]
-	places = client.convert_coords(40.73090439289119, -73.99732690284772, types)
+	WASH_PARK = (40.73090439289119, -73.99732690284772)
+	places = client.convert_coords(WASH_PARK[0], WASH_PARK[1], types)
 	name = places[0]['name']
-	summary = client.get_summary(name)
-	print(summary["summary"])
+	print(name)
+
+	print(client.get_location_from_coordinates(WASH_PARK[0], WASH_PARK[1]))
