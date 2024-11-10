@@ -1,9 +1,7 @@
-// src/components/home/ExploreNearbyOptions.js
-
 import React, { useState } from 'react';
 import { createTripEmissions } from '../../services/emissionsService';
 
-const ExploreNearbyOptions = ({ nearbyPlaces = [], currentLocation }) => { // Default nearbyPlaces to []
+const ExploreNearbyOptions = ({ nearbyPlaces = [], currentLocation }) => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [tripMode, setTripMode] = useState('');
   const [totalEmissions, setTotalEmissions] = useState(0);
@@ -23,21 +21,44 @@ const ExploreNearbyOptions = ({ nearbyPlaces = [], currentLocation }) => { // De
       alert("Please select a place and travel mode.");
       return;
     }
-    
-    const origin = { lat: currentLocation?.lat, long: currentLocation?.long };
-    const destination = { lat: selectedPlace.lat, long: selectedPlace.long };
-
+  
+    // Determine origin coordinates with fallback to nearbyPlaces[0]
+    const origin = nearbyPlaces[0];
+    const o_lat = origin?.lat || currentLocation?.lat;
+    const o_long = origin?.long || currentLocation?.long;
+  
+    // Check if origin coordinates are still missing after the fallback
+    if (o_lat == null || o_long == null) {
+      console.error("Origin coordinates are undefined. Please ensure currentLocation or nearbyPlaces contains valid coordinates.");
+      alert("Origin coordinates are missing.");
+      return;
+    }
+  
+    // Extract destination coordinates
+    const destination = {
+      lat: selectedPlace.lat,
+      long: selectedPlace.long
+    };
+  
+    // Check if destination coordinates are valid
+    if (destination.lat == null || destination.long == null) {
+      console.error("Selected place does not have valid coordinates:", selectedPlace);
+      alert("The selected place does not have valid coordinates.");
+      return;
+    }
+  
     try {
-      const emissions = await createTripEmissions(origin, destination, tripMode);
+      const emissions = await createTripEmissions({ lat: o_lat, long: o_long }, destination, tripMode);
       setTotalEmissions((prevTotal) => prevTotal + emissions);
       setTrips((prevTrips) => [
         ...prevTrips,
-        { start: currentLocation.name, destination: selectedPlace.name, emissions }
+        { start: currentLocation.name || origin.name || "Current Location", destination: selectedPlace.name, emissions }
       ]);
     } catch (error) {
       console.error('Error creating trip:', error);
     }
   };
+  
 
   return (
     <div>
