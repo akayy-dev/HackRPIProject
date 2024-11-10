@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import TripForm from '../components/emissions/TripForm';
 import LocationTable from '../components/home/LocationTable';
-import LocationDisplay from '../components/home/LocationDisplay';
+import LocationDisplay from '../components/home/locationDisplay';
 import { getGeolocation, fetchLocationData } from '../services/locationService';
 import '../styles/HomePage.css';
 
